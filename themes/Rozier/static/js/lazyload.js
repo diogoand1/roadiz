@@ -67,12 +67,13 @@ Lazyload.prototype.onClick = function(event) {
 
     if(typeof href !== "undefined" &&
         !$link.hasClass('rz-no-ajax-link') &&
+        !$link.hasClass('content-header-nav-back') &&
         href !== "" &&
         href != "#" &&
         (href.indexOf(Rozier.baseUrl) >= 0 || href.charAt(0) == '?')) {
         event.preventDefault();
 
-        history.pushState({}, null, $link.attr('href'));
+        history.pushState({'href':href}, null, href);
         _this.onPopState(null);
         return false;
     }
@@ -249,8 +250,22 @@ Lazyload.prototype.generalBind = function() {
         size: 'small'
     });
 
+
+    // Content header nav back
+    var $contentHeaderNavBack = $('.content-header-nav-back');
+
+    if($contentHeaderNavBack.length && Modernizr.history && typeof history.state.href !== 'undefined'){
+
+        $contentHeaderNavBack.on('click', function(){
+            history.back();
+
+            return false;
+        });
+    }
+
     Rozier.getMessages();
 };
+
 
 Lazyload.prototype.initMarkdownEditors = function() {
     var _this = this;
